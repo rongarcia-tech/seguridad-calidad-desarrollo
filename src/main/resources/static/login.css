@@ -1,0 +1,58 @@
+/* Estructura centrada en pantalla */
+.login-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.login-card {
+  width: min(420px, 92vw);
+  padding: 2rem;
+}
+
+/* Títulos y textos */
+.login-title {
+  margin: 0 0 .5rem 0;
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+}
+.login-subtitle {
+  margin: 0 0 1.25rem 0;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+/* Formulario */
+.login-form .field { margin-bottom: .9rem; }
+.login-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: .35rem;
+}
+.login-form .actions { margin-top: 1rem; }
+.login-form .actions .btn { width: 100%; }
+
+/* Mensajes superiores (si usas los <div> del template tal cual) */
+body > div {
+  width: min(420px, 92vw);
+  margin: 1rem auto 0;
+  font-size: .95rem;
+  /* apariencia de .alert genérica si no puedes agregar clases thymeleaf */
+  padding: .75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+body > div:first-of-type { /* error de login */
+  border-color: #fecaca; background: #fef2f2; color: #7f1d1d;
+}
+body > div:nth-of-type(2) { /* logout ok */
+  border-color: #bbf7d0; background: #f0fdf4; color: #14532d;
+}
+
+/* Tip: si puedes, agrega clases Thymeleaf:
+<div class="alert alert--error" th:if="${param.error}">...</div>
+<div class="alert alert--ok"    th:if="${param.logout}">...</div>
+y se aplicarán los estilos globales de style.css
+*/
