@@ -4,6 +4,7 @@ import com.duoc.seguridad_calidad.domain.*;
 import com.duoc.seguridad_calidad.repositories.MaquinariaRepository;
 import com.duoc.seguridad_calidad.repositories.UsuarioRepository;
 import com.duoc.seguridad_calidad.services.AvisoService;
+import io.swagger.v3.oas.annotations.Operation; 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,15 +28,25 @@ public class AvisoController {
         this.avisoService = avisoService;
     }
 
+    @Operation(
+        summary = "Mostrar formulario para nuevo aviso",
+        description = "Devuelve el formulario para crear un nuevo aviso de maquinaria. "
+                    + "Solo muestra las maquinarias pertenecientes al usuario autenticado."
+    )
     @GetMapping("/nuevo")
     public String form(Authentication auth, Model model) {
         Usuario u = userRepo.findByEmail(auth.getName()).orElseThrow();
-        // simplificación: mostrar todas las maquinarias del dueño (si tu entidad Maquinaria tiene dueno)
-        List<Maquinaria> mis = maqRepo.findAll().stream().filter(m -> m.getDueno().getId().equals(u.getId())).toList();
+        List<Maquinaria> mis = maqRepo.findAll().stream()
+                .filter(m -> m.getDueno().getId().equals(u.getId()))
+                .toList();
         model.addAttribute("misMaquinarias", mis);
         return "aviso-form";
     }
 
+    @Operation(
+        summary = "Publicar un nuevo aviso",
+        description = "Crea un nuevo aviso asociado a una maquinaria existente, incluyendo fechas, precio, condiciones y medio de pago."
+    )
     @PostMapping
     public String publicar(@RequestParam Long maquinariaId,
                            @RequestParam String desde,
@@ -50,10 +61,13 @@ public class AvisoController {
         return "redirect:/home";
     }
 
+    @Operation(
+        summary = "Listar mis avisos",
+        description = "Muestra todos los avisos publicados por el usuario autenticado, filtrando por dueño de la maquinaria."
+    )
     @GetMapping("/mios")
     public String misAvisos(Authentication auth, Model model) {
         var user = userRepo.findByEmail(auth.getName()).orElseThrow();
-        // filtra por dueño
         var misAvisos = maqRepo.findAll().stream()
                 .filter(a -> a.getDueno().getId().equals(user.getId()))
                 .toList();

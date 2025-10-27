@@ -3,7 +3,6 @@ package com.duoc.seguridad_calidad.domain;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Entity
 @Table(name = "avisos")

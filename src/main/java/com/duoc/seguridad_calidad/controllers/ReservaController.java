@@ -6,6 +6,7 @@ import com.duoc.seguridad_calidad.repositories.AvisoRepository;
 import com.duoc.seguridad_calidad.repositories.ReservaRepository;
 import com.duoc.seguridad_calidad.repositories.UsuarioRepository;
 import com.duoc.seguridad_calidad.services.ReservaService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,10 @@ public class ReservaController {
         this.reservaService = reservaService;
     }
 
+    @Operation(
+        summary = "Formulario de nueva reserva",
+        description = "Muestra el formulario para crear una nueva reserva para un aviso específico."
+    )
     @GetMapping("/nueva")
     public String form(@RequestParam Long avisoId, Model model) {
         Aviso a = avisoRepo.findById(avisoId).orElseThrow();
@@ -36,6 +41,10 @@ public class ReservaController {
         return "reserva-form";
     }
 
+    @Operation(
+        summary = "Crear nueva reserva",
+        description = "Registra una nueva reserva para el usuario autenticado sobre un aviso determinado, con fechas de inicio y fin."
+    )
     @PostMapping
     public String crear(Authentication auth,
                         @RequestParam Long avisoId,
@@ -47,6 +56,10 @@ public class ReservaController {
         return "redirect:/home";
     }
 
+    @Operation(
+        summary = "Listar mis reservas",
+        description = "Muestra todas las reservas realizadas por el usuario autenticado."
+    )
     @GetMapping("/mias")
     public String misReservas(Authentication auth, Model model) {
         var user = userRepo.findByEmail(auth.getName()).orElseThrow();

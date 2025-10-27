@@ -1,7 +1,6 @@
 package com.duoc.seguridad_calidad.repositories;
 
 import com.duoc.seguridad_calidad.domain.Maquinaria;
-import com.duoc.seguridad_calidad.domain.TipoMaquinaria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

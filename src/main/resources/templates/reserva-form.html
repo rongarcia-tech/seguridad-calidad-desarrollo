@@ -7,30 +7,34 @@
     <link rel="stylesheet" href="/css/reserva-form.css">
 </head>
 <body class="page">
-<main class="container">
-    <section class="card">
-        <h1>Nueva reserva</h1>
-        <div class="alert" th:if="${aviso != null}">
-            <strong th:text="${aviso.maquinaria.marca} + ' ' + ${aviso.maquinaria.modelo}"></strong>
-            — $<span th:text="${#numbers.formatDecimal(aviso.precioPorDia,0,'COMMA',0,'POINT')}"></span> / día
-        </div>
-        <form th:action="@{/reservas}" method="post" class="form">
-            <input type="hidden" name="avisoId" th:value="${aviso?.id}">
-            <div class="grid-3">
-                <div class="field">
-                    <label>Desde</label>
-                    <input class="input" type="date" name="inicio" required>
-                </div>
-                <div class="field">
-                    <label>Hasta</label>
-                    <input class="input" type="date" name="fin" required>
-                </div>
-                <div class="field actions">
-                    <button class="btn" type="submit">Reservar</button>
-                </div>
+
+    <!-- Navbar centralizado -->
+    <div th:replace="fragments/header :: siteHeader"></div>
+
+    <main class="container">
+        <section class="card">
+            <h1>Nueva reserva</h1>
+            <div class="alert" th:if="${aviso != null}">
+                <strong th:text="${aviso.maquinaria.marca} + ' ' + ${aviso.maquinaria.modelo}"></strong>
+                — $<span th:text="${#numbers.formatDecimal(aviso.precioPorDia,0,'COMMA',0,'POINT')}"></span> / día
             </div>
-        </form>
-    </section>
-</main>
+            <form th:action="@{/reservas}" method="post" class="form">
+                <input type="hidden" name="avisoId" th:value="${aviso?.id}">
+                <div class="grid-3">
+                    <div class="field">
+                        <label>Desde</label>
+                        <input class="input" type="date" name="inicio" required>
+                    </div>
+                    <div class="field">
+                        <label>Hasta</label>
+                        <input class="input" type="date" name="fin" required>
+                    </div>
+                    <div class="field actions">
+                        <button class="btn" type="submit">Reservar</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
 </body>
 </html>

@@ -6,19 +6,22 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="page">
-<div th:replace="fragments/header :: *"></div>
-<main class="container">
-    <h1>Mis reservas</h1>
-    <div class="grid" th:if="${reservas}">
-        <article class="card" th:each="r : ${reservas}">
-            <h3 th:text="${r.maquinaria.marca} + ' ' + ${r.maquinaria.modelo}"></h3>
-            <p>Del <strong th:text="${r.fechaInicio}"></strong> al <strong th:text="${r.fechaFin}"></strong></p>
-            <p>Estado: <strong th:text="${r.estado}"></strong></p>
-            <p>Total: $<strong th:text="${#numbers.formatDecimal(r.precioTotal,0,'COMMA',0,'POINT')}"></strong></p>
-            <a class="btn" th:href="@{'/maquinaria/' + ${r.maquinaria.id}}">Ver</a>
-        </article>
-    </div>
-    <p th:if="${reservas != null and #lists.isEmpty(reservas)}">No tienes reservas.</p>
-</main>
+
+    <!-- Navbar centralizado -->
+    <div th:replace="fragments/header :: siteHeader"></div>
+
+    <main class="container">
+        <h1>Mis reservas</h1>
+        <div class="grid" th:if="${reservas}">
+            <article class="card" th:each="r : ${reservas}">
+                <h3 th:text="${r.maquinaria.marca} + ' ' + ${r.maquinaria.modelo}"></h3>
+                <p>Del <strong th:text="${r.fechaInicio}"></strong> al <strong th:text="${r.fechaFin}"></strong></p>
+                <p>Estado: <strong th:text="${r.estado}"></strong></p>
+                <p>Total: $<strong th:text="${#numbers.formatDecimal(r.precioTotal,0,'COMMA',0,'POINT')}"></strong></p>
+                <a class="btn" th:href="@{'/maquinaria/' + ${r.maquinaria.id}}">Ver</a>
+            </article>
+        </div>
+        <p th:if="${reservas != null and #lists.isEmpty(reservas)}">No tienes reservas.</p>
+    </main>
 </body>
 </html>

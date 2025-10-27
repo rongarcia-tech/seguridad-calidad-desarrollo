@@ -7,41 +7,45 @@
     <link rel="stylesheet" href="/css/detalle.css">
 </head>
 <body class="page">
-<main class="container">
-    <a href="/buscar">← Volver</a>
-    <section class="card detalle">
-        <h1 th:text="${maq.marca} + ' ' + ${maq.modelo}"></h1>
-        <p>
-            Tipo: <strong th:text="${maq.tipo}"></strong> •
-            Año: <strong th:text="${maq.anioFabricacion}"></strong> •
-            Capacidad: <strong th:text="${maq.capacidad}"></strong>
-        </p>
-        <p>
-            Ubicación:
-            <strong th:text="${maq.ubicacionRegion}"></strong>,
-            <strong th:text="${maq.ubicacionComuna}"></strong>
-        </p>
-        <p>Precio base: $<strong th:text="${#numbers.formatDecimal(maq.precioPorDia,0,'COMMA',0,'POINT')}"></strong> / día</p>
 
-        <h3>Condiciones de arriendo</h3>
-        <p th:text="${aviso.condicionesArriendo}">—</p>
-        <p>Medio de pago: <strong th:text="${aviso.medioPago}">—</strong></p>
-        <p>Disponible: <strong th:text="${aviso.disponibleDesde}"></strong> a <strong th:text="${aviso.disponibleHasta}"></strong></p>
+    <!-- Navbar centralizado -->
+    <div th:replace="fragments/header :: siteHeader"></div>
 
-        <div class="actions">
-            <a class="btn" th:href="@{'/reservas/nueva?avisoId=' + ${aviso.id}}">Reservar</a>
-        </div>
-    </section>
+    <main class="container">
+        <a href="/buscar">← Volver</a>
+        <section class="card detalle">
+            <h1 th:text="${maq.marca} + ' ' + ${maq.modelo}"></h1>
+            <p>
+                Tipo: <strong th:text="${maq.tipo}"></strong> •
+                Año: <strong th:text="${maq.anioFabricacion}"></strong> •
+                Capacidad: <strong th:text="${maq.capacidad}"></strong>
+            </p>
+            <p>
+                Ubicación:
+                <strong th:text="${maq.ubicacionRegion}"></strong>,
+                <strong th:text="${maq.ubicacionComuna}"></strong>
+            </p>
+            <p>Precio base: $<strong th:text="${#numbers.formatDecimal(maq.precioPorDia,0,'COMMA',0,'POINT')}"></strong> / día</p>
 
-    <section class="card mantenciones">
-        <h3>Mantenciones</h3>
-        <ul>
-            <li th:each="m : ${maq.mantenciones}">
-                <strong th:text="${m.fecha}"></strong> — <span th:text="${m.detalle}"></span>
-            </li>
-            <li th:if="${#lists.isEmpty(maq.mantenciones)}">Sin registros.</li>
-        </ul>
-    </section>
-</main>
+            <h3>Condiciones de arriendo</h3>
+            <p th:text="${aviso.condicionesArriendo}">—</p>
+            <p>Medio de pago: <strong th:text="${aviso.medioPago}">—</strong></p>
+            <p>Disponible: <strong th:text="${aviso.disponibleDesde}"></strong> a <strong th:text="${aviso.disponibleHasta}"></strong></p>
+
+            <div class="actions">
+                <a class="btn" th:href="@{'/reservas/nueva?avisoId=' + ${aviso.id}}">Reservar</a>
+            </div>
+        </section>
+
+        <section class="card mantenciones">
+            <h3>Mantenciones</h3>
+            <ul>
+                <li th:each="m : ${maq.mantenciones}">
+                    <strong th:text="${m.fecha}"></strong> — <span th:text="${m.detalle}"></span>
+                </li>
+                <li th:if="${#lists.isEmpty(maq.mantenciones)}">Sin registros.</li>
+            </ul>
+        </section>
+    </main>
 </body>
 </html>

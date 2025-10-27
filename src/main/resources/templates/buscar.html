@@ -7,64 +7,70 @@
     <link rel="stylesheet" href="/css/buscar.css">
 </head>
 <body class="page">
-<div th:replace="fragments/header ::  siteHeader"></div>
 
-<main class="container">
-    <h1>Buscar maquinaria</h1>
+    <!-- Inclusión del fragmento de navegación centralizado -->
+    <div th:replace="fragments/header :: siteHeader"></div>
 
-    <form class="card form" th:action="@{/buscar}" method="get">
-        <div class="grid-4">
-            <div class="field">
-                <label>Tipo</label>
-                <select class="input" name="tipo">
-                    <option value="">-- Todos --</option>
-                    <option th:each="t : ${tipos}" th:value="${t}" th:text="${t}"></option>
-                </select>
-            </div>
-            <div class="field">
-                <label>Región</label>
-                <input class="input" type="text" name="region" th:value="${param.region}">
-            </div>
-            <div class="field">
-                <label>Comuna</label>
-                <input class="input" type="text" name="comuna" th:value="${param.comuna}">
-            </div>
-            <div class="field">
-                <label>Precio máx.</label>
-                <input class="input" type="number" min="0" name="precioMax" th:value="${param.precioMax}">
-            </div>
-        </div>
-        <div class="grid-3">
-            <div class="field">
-                <label>Desde</label>
-                <input class="input" type="date" name="desde" th:value="${param.desde}">
-            </div>
-            <div class="field">
-                <label>Hasta</label>
-                <input class="input" type="date" name="hasta" th:value="${param.hasta}">
-            </div>
-            <div class="field actions">
-                <button class="btn" type="submit">Buscar</button>
-            </div>
-        </div>
-    </form>
+    <main class="container">
+        <h1>Buscar maquinaria</h1>
 
-    <section class="resultados">
-        <h2 th:if="${resultados != null}">Resultados</h2>
-        <div class="grid" th:if="${resultados != null}">
-            <article class="card item" th:each="m : ${resultados}">
-                <h3 th:text="${m.marca} + ' ' + ${m.modelo}"></h3>
-                <p>
-                    <span th:text="${m.tipo}"></span> •
-                    <span th:text="${m.ubicacionRegion}"></span>,
-                    <span th:text="${m.ubicacionComuna}"></span>
-                </p>
-                <p>$<span th:text="${#numbers.formatDecimal(m.precioPorDia,0,'COMMA',0,'POINT')}"></span> / día</p>
-                <a class="btn" th:href="@{'/maquinaria/' + ${m.id}}">Ver detalle</a>
-            </article>
-        </div>
-        <div th:if="${resultados != null and #lists.isEmpty(resultados)}">Sin resultados.</div>
-    </section>
-</main>
+        <!-- Formulario de búsqueda -->
+        <form class="card form" th:action="@{/buscar}" method="get">
+            <div class="grid-4">
+                <div class="field">
+                    <label>Tipo</label>
+                    <select class="input" name="tipo">
+                        <option value="">-- Todos --</option>
+                        <option th:each="t : ${tipos}" th:value="${t}" th:text="${t}"></option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Región</label>
+                    <input class="input" type="text" name="region" th:value="${param.region}">
+                </div>
+                <div class="field">
+                    <label>Comuna</label>
+                    <input class="input" type="text" name="comuna" th:value="${param.comuna}">
+                </div>
+                <div class="field">
+                    <label>Precio máx.</label>
+                    <input class="input" type="number" min="0" name="precioMax" th:value="${param.precioMax}">
+                </div>
+            </div>
+            <div class="grid-3">
+                <div class="field">
+                    <label>Desde</label>
+                    <input class="input" type="date" name="desde" th:value="${param.desde}">
+                </div>
+                <div class="field">
+                    <label>Hasta</label>
+                    <input class="input" type="date" name="hasta" th:value="${param.hasta}">
+                </div>
+                <div class="field actions">
+                    <button class="btn" type="submit">Buscar</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Resultados de búsqueda -->
+        <section class="resultados">
+            <h2 th:if="${resultados != null}">Resultados</h2>
+            <div class="grid" th:if="${resultados != null}">
+                <article class="card item" th:each="m : ${resultados}">
+                    <h3 th:text="${m.marca} + ' ' + ${m.modelo}"></h3>
+                    <p>
+                        <span th:text="${m.tipo}"></span> •
+                        <span th:text="${m.ubicacionRegion}"></span>,
+                        <span th:text="${m.ubicacionComuna}"></span>
+                    </p>
+                    <p>$<span th:text="${#numbers.formatDecimal(m.precioPorDia,0,'COMMA',0,'POINT')}"></span> / día</p>
+                    <a class="btn" th:href="@{'/maquinaria/' + ${m.id}}">Ver detalle</a>
+                </article>
+            </div>
+            <div th:if="${resultados != null and #lists.isEmpty(resultados)}">Sin resultados.</div>
+        </section>
+
+    </main>
+
 </body>
 </html>

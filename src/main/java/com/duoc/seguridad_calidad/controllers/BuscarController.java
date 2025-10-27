@@ -3,6 +3,7 @@ package com.duoc.seguridad_calidad.controllers;
 import com.duoc.seguridad_calidad.domain.Maquinaria;
 import com.duoc.seguridad_calidad.domain.TipoMaquinaria;
 import com.duoc.seguridad_calidad.services.MaquinariaService;
+import io.swagger.v3.oas.annotations.Operation; 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,10 @@ public class BuscarController {
         this.maquinariaService = maquinariaService;
     }
 
+    @Operation(
+        summary = "Buscar maquinarias disponibles",
+        description = "Permite filtrar maquinarias según tipo, región, comuna, rango de fechas o precio máximo."
+    )
     @GetMapping("/buscar")
     public String buscar(@RequestParam(required = false) TipoMaquinaria tipo,
                          @RequestParam(required = false) String region,
