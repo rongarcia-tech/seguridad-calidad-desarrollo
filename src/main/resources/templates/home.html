@@ -1,15 +1,56 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>Inicio</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
 </head>
-<body>
-<h1 th:text="|Bienvenido a ${name}!|"></h1>
-<div sec:authorize="isAuthenticated()">
-    <h1 th:inline="text">Hola <span th:remove="tag" sec:authentication="name"></span>!</h1>
-    <h2>Seguridad implementada con Spring Security</h2>
-</div>
+<body class="page">
+<header class="site-header">
+    <h1>AgroRent</h1>
+    <nav>
+        <a href="/home">Inicio</a>
+        <a href="/buscar">Buscar maquinaria</a>
+        <a href="/register">Registrarse</a>
+        <a href="/login">Ingresar</a>
+    </nav>
+</header>
+<div th:replace="fragments/header ::  siteHeader"></div>
+
+<main class="container">
+    <section class="hero card">
+        <h2>Arrienda o publica tu maquinaria agrícola</h2>
+        <p>Eventos, fechas de cosecha, organizaciones y avisos destacados.</p>
+    </section>
+
+    <section class="destacados">
+        <h3>Avisos destacados</h3>
+        <div class="grid" th:if="${destacados != null}">
+            <article class="aviso card" th:each="aviso : ${destacados}">
+                <h4 th:text="${aviso.maquinaria.marca} + ' ' + ${aviso.maquinaria.modelo}"></h4>
+                <p>
+                    <span th:text="${aviso.maquinaria.tipo}"></span> •
+                    <span th:text="${aviso.maquinaria.ubicacionRegion}"></span>,
+                    <span th:text="${aviso.maquinaria.ubicacionComuna}"></span>
+                </p>
+                <p>
+                    $<span th:text="${#numbers.formatDecimal(aviso.precioPorDia,0,'COMMA',0,'POINT')}"></span> / día
+                </p>
+                <a th:href="@{'/maquinaria/' + ${aviso.maquinaria.id}}" class="btn">Ver detalle</a>
+            </article>
+        </div>
+        <div th:if="${#lists.isEmpty(destacados)}">No hay avisos destacados por ahora.</div>
+    </section>
+
+    <section class="info-agro card">
+        <h3>Información agrícola</h3>
+        <ul>
+            <li>Fechas clave de cosecha</li>
+            <li>Programas de apoyo del gobierno</li>
+            <li>Organizaciones de agricultores</li>
+        </ul>
+    </section>
+</main>
 </body>
 </html>

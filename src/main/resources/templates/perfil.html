@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Mi perfil</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/perfil.css">
+</head>
+<body class="page">
+<main class="container">
+    <section class="card perfil">
+        <h1>Mi perfil</h1>
+        <form th:action="@{/perfil}" method="post" class="form">
+            <div class="grid-3">
+                <div class="field">
+                    <label>Dirección</label>
+                    <input class="input" type="text" name="direccion" th:value="${perfil?.direccion}">
+                </div>
+                <div class="field">
+                    <label>Teléfono</label>
+                    <input class="input" type="text" name="telefono" th:value="${perfil?.telefono}">
+                </div>
+                <div class="field">
+                    <label>Cultivos</label>
+                    <input class="input" type="text" name="cultivos" th:value="${perfil?.cultivos}">
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn" type="submit">Guardar</button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>
+>

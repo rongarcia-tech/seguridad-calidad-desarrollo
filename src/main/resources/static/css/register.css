@@ -1,0 +1,2 @@
+.register-card { width:min(520px, 92vw); margin-top:2rem; padding:2rem; }
+.form .actions { display:flex; gap:1rem; align-items:center; }

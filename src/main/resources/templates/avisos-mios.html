@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Mis avisos</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page">
+<div th:replace="fragments/header :: *"></div>
+<main class="container">
+    <h1>Mis avisos</h1>
+    <a class="btn" href="/avisos/nuevo">Publicar nuevo</a>
+    <div class="grid" th:if="${avisos}">
+        <article class="card" th:each="a : ${avisos}">
+            <h3 th:text="${a.maquinaria.marca} + ' ' + ${a.maquinaria.modelo}"></h3>
+            <p>Desde <strong th:text="${a.disponibleDesde}"></strong> hasta <strong th:text="${a.disponibleHasta}"></strong></p>
+            <p>$<span th:text="${#numbers.formatDecimal(a.precioPorDia,0,'COMMA',0,'POINT')}"></span> / día</p>
+            <p>Destacado: <strong th:text="${a.destacado}"></strong></p>
+            <a class="btn" th:href="@{'/maquinaria/' + ${a.maquinaria.id}}">Ver</a>
+        </article>
+    </div>
+    <p th:if="${avisos != null and #lists.isEmpty(avisos)}">No tienes avisos.</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,5 @@
+.page .hero { padding: 1.5rem; margin: 1rem 0; }
+.destacados .grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 1rem; }
+.info-agro { margin-top: 1.5rem; padding: 1rem; }
+.site-header { display:flex; justify-content:space-between; align-items:center; padding:1rem; }
+.site-header nav a { margin-right: .75rem; }

@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Publicar aviso</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/aviso-form.css">
+</head>
+<body class="page">
+<main class="container">
+    <section class="card">
+        <h1>Publicar aviso</h1>
+        <form th:action="@{/avisos}" method="post" class="form">
+            <div class="field">
+                <label>Maquinaria</label>
+                <select class="input" name="maquinariaId" required>
+                    <option th:each="m : ${misMaquinarias}" th:value="${m.id}"
+                            th:text="${m.marca} + ' ' + ${m.modelo} + ' (' + ${m.tipo} + ')'"></option>
+                </select>
+            </div>
+            <div class="grid-3">
+                <div class="field">
+                    <label>Disponible desde</label>
+                    <input class="input" type="date" name="desde" required>
+                </div>
+                <div class="field">
+                    <label>Disponible hasta</label>
+                    <input class="input" type="date" name="hasta" required>
+                </div>
+                <div class="field">
+                    <label>Precio por día</label>
+                    <input class="input" type="number" min="0" name="precioPorDia" required>
+                </div>
+            </div>
+            <div class="field">
+                <label>Condiciones</label>
+                <textarea class="input" name="condiciones" rows="4"></textarea>
+            </div>
+            <div class="grid-2">
+                <div class="field">
+                    <label>Medio de pago</label>
+                    <select class="input" name="medioPago" required>
+                        <option>EFECTIVO</option>
+                        <option>TRANSFERENCIA</option>
+                        <option>TARJETA</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Destacado</label>
+                    <input type="checkbox" name="destacado">
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn" type="submit">Publicar</button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

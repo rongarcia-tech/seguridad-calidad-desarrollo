@@ -1,22 +1,22 @@
 package com.duoc.seguridad_calidad.controllers;
 
+import com.duoc.seguridad_calidad.services.AvisoService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class HomeController {
-    @GetMapping("/home")
-    public String home(@RequestParam(name = "name", required = false, defaultValue = "Seguridad y Calidad en el Desarrollo")
-                       String name, Model model) {
-        model.addAttribute("name", name);
-        return "Home";
-    }
+    private final AvisoService avisoService;
 
-    @GetMapping("/")
-    public String root(@RequestParam(name = "name", required = false, defaultValue = "Seguridad y Calidad en el Desarrollo root")
-                       String name, Model model) {
-        model.addAttribute("name", name);
-        return "Home";
+    public HomeController(AvisoService avisoService) {
+        this.avisoService = avisoService;
+    }
+    @Operation(summary = "Saludo simple", description = "Devuelve un saludo")
+    @GetMapping({"/", "/home"})
+    public String home(Model model) {
+        model.addAttribute("destacados", avisoService.destacados());
+        return "home";
     }
 }
