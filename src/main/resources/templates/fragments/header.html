@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
-<head></head>
-<body>
 <header class="site-header" th:fragment="siteHeader">
     <h1><a href="/home">AgroRent</a></h1>
     <nav>
         <a href="/buscar">Buscar</a>
         <a href="/avisos/mios"  sec:authorize="isAuthenticated()">Mis avisos</a>
         <a href="/reservas/mias" sec:authorize="isAuthenticated()">Mis reservas</a>
+        <a href="/maquinaria/mias"  sec:authorize="isAuthenticated()">Mis maquinarias</a>
         <a href="/perfil"       sec:authorize="isAuthenticated()">Mi perfil</a>
 
         <!-- No autenticado -->
@@ -25,5 +22,4 @@
     </span>
     </nav>
 </header>
-</body>
-</html>
+

@@ -22,8 +22,7 @@ import java.util.List;
 public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Matchers sin deprecaciones
-        // Matchers modernos para CSRF ignoring
+        // Matchers para CSRF ignoring
         var pp = PathPatternRequestMatcher.withDefaults();
 
         var openApiDocs = pp.matcher("/v3/api-docs/**");

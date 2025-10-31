@@ -4,6 +4,10 @@ import com.duoc.seguridad_calidad.domain.Maquinaria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface MaquinariaRepository extends JpaRepository<Maquinaria, Long>, JpaSpecificationExecutor<Maquinaria> {
-    // Usaremos Specifications para la búsqueda por tipo/ubicación/fecha/precio
+    List<Maquinaria> findByDuenoIdOrderByIdDesc(Long duenoId);
+    Optional<Maquinaria> findByIdAndDuenoEmail(Long id, String email);
 }

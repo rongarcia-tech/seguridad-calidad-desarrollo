@@ -8,9 +8,6 @@
 </head>
 <body class="page">
 
-    <!-- Navbar centralizado -->
-    <div th:replace="fragments/header :: siteHeader"></div>
-
     <main class="container card register-card">
         <h1>Crear cuenta</h1>
         <div class="alert alert--error" th:if="${error}" th:text="${error}"></div>

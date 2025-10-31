@@ -1,6 +1,7 @@
 package com.duoc.seguridad_calidad.controllers;
 
 import com.duoc.seguridad_calidad.domain.*;
+import com.duoc.seguridad_calidad.repositories.AvisoRepository;
 import com.duoc.seguridad_calidad.repositories.MaquinariaRepository;
 import com.duoc.seguridad_calidad.repositories.UsuarioRepository;
 import com.duoc.seguridad_calidad.services.AvisoService;
@@ -20,11 +21,13 @@ public class AvisoController {
 
     private final MaquinariaRepository maqRepo;
     private final UsuarioRepository userRepo;
+    private final AvisoRepository avisoRepo;
     private final AvisoService avisoService;
 
-    public AvisoController(MaquinariaRepository maqRepo, UsuarioRepository userRepo, AvisoService avisoService) {
+    public AvisoController(MaquinariaRepository maqRepo, UsuarioRepository userRepo, AvisoService avisoService, AvisoRepository avisoRepo) {
         this.maqRepo = maqRepo;
         this.userRepo = userRepo;
+        this.avisoRepo = avisoRepo;
         this.avisoService = avisoService;
     }
 
@@ -68,9 +71,7 @@ public class AvisoController {
     @GetMapping("/mios")
     public String misAvisos(Authentication auth, Model model) {
         var user = userRepo.findByEmail(auth.getName()).orElseThrow();
-        var misAvisos = maqRepo.findAll().stream()
-                .filter(a -> a.getDueno().getId().equals(user.getId()))
-                .toList();
+        var misAvisos = avisoRepo.findByMaquinaria_Dueno_IdOrderByIdDesc(user.getId());
         model.addAttribute("avisos", misAvisos);
         return "avisos-mios";
     }

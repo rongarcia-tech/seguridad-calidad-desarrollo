@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Mis maquinarias</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/header.css">
+</head>
+<body class="page">
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<main class="container">
+    <section class="card" style="padding:1rem">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem">
+            <h1 style="margin:0">Mis maquinarias</h1>
+            <a class="btn" href="/maquinaria/nueva">Crear maquinaria</a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(misMaquinarias)}" class="mt-3">
+            <div class="alert">Aún no tienes maquinarias cargadas.</div>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(misMaquinarias)}" class="mt-3">
+            <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1rem">
+                <article class="card" th:each="m : ${misMaquinarias}" style="padding:1rem">
+                    <h3 th:text="${m.marca} + ' ' + ${m.modelo}" style="margin:.2rem 0"></h3>
+                    <p class="mt-1" style="color:var(--muted)">
+                        <span th:text="${m.tipo}"></span> ·
+                        <span th:text="${m.anioFabricacion}"></span> ·
+                        <span th:text="${m.capacidad}"></span>
+                    </p>
+                    <p class="mt-1">
+                        <strong th:text="'$ ' + ${#numbers.formatDecimal(m.precioPorDia, 0, 'POINT', 0, 'COMMA')} + ' /día'"></strong>
+                    </p>
+                    <p class="mt-1" style="font-size:.95rem">
+                        <span th:text="${m.ubicacionComuna}"></span>,
+                        <span th:text="${m.ubicacionRegion}"></span>
+                    </p>
+                    <div class="mt-2" style="display:flex; gap:.5rem; flex-wrap:wrap">
+                        <a class="btn" th:href="@{/maquinaria/{id}(id=${m.id})}">Ver detalle</a>
+                        <!-- aquí a futuro: Editar / Eliminar -->
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

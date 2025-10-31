@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface AvisoRepository extends JpaRepository<Aviso, Long> {
     List<Aviso> findTop10ByDestacadoTrueOrderByIdDesc();
+    List<Aviso> findByMaquinaria_Dueno_IdOrderByIdDesc(Long duenoId);
 }

@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/buscar.css">
+    <link rel="stylesheet" href="/css/header.css">
 </head>
 <body class="page">
 
@@ -40,7 +41,7 @@
             <div class="grid-3">
                 <div class="field">
                     <label>Desde</label>
-                    <input class="input" type="date" name="desde" th:value="${param.desde}">
+                    <input class="input" type="date" name="desde" th:value="${param.desde} ?: ${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}">
                 </div>
                 <div class="field">
                     <label>Hasta</label>

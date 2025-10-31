@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nueva maquinaria</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/header.css">
+</head>
+<body class="page">
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<main class="container">
+    <section class="card" style="padding:1rem">
+        <h1>Nueva maquinaria</h1>
+
+        <!-- IMPORTANTE: th:object está AQUÍ, y TODOS los campos van DENTRO -->
+        <form th:action="@{/maquinaria}" method="post">
+            <div th:object="${maquinaria}">
+
+                <!-- DEBUG: imprime si hay objeto de selección -->
+                <pre style="display:none" th:text="${#object}">sin objeto</pre>
+
+                <div class="field">
+                    <label>Tipo</label>
+                    <select class="input" th:field="*{tipo}" required>
+                        <option th:each="t : ${tipos}" th:value="${t}" th:text="${t}"></option>
+                    </select>
+                </div>
+
+                <div class="grid-3">
+                    <div class="field">
+                        <label>Marca</label>
+                        <input class="input" th:field="*{marca}" required>
+                    </div>
+                    <div class="field">
+                        <label>Modelo</label>
+                        <input class="input" th:field="*{modelo}" required>
+                    </div>
+                    <div class="field">
+                        <label>Año fabricación</label>
+                        <input class="input" type="number" th:field="*{anioFabricacion}" min="1900" max="2100">
+                    </div>
+                </div>
+
+                <div class="grid-3">
+                    <div class="field">
+                        <label>Capacidad</label>
+                        <input class="input" th:field="*{capacidad}">
+                    </div>
+                    <div class="field">
+                        <label>Precio por día</label>
+                        <input class="input" type="number" step="0.01" min="0" th:field="*{precioPorDia}" required>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="field">
+                        <label>Comuna</label>
+                        <input class="input" th:field="*{ubicacionComuna}" required>
+                    </div>
+                    <div class="field">
+                        <label>Región</label>
+                        <input class="input" th:field="*{ubicacionRegion}" required>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn" type="submit">Guardar</button>
+                    <a class="btn" href="/maquinaria/mias" style="background:#6b7280">Cancelar</a>
+                </div>
+
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>
