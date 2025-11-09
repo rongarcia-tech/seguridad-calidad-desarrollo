@@ -1,14 +1,14 @@
 package com.duoc.seguridad_calidad.security;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -20,45 +20,62 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Matchers para CSRF ignoring
         var pp = PathPatternRequestMatcher.withDefaults();
-
         var openApiDocs = pp.matcher("/v3/api-docs/**");
         var swaggerUi   = pp.matcher("/swagger-ui/**");
 
         http
-                .authorizeHttpRequests(auth -> auth
-                        //Datos en memoria
-                        .requestMatchers(PathRequest.toH2Console()).permitAll()
-                        //swagger
-                        .requestMatchers("/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**").permitAll()
-                        // estáticos y páginas públicas
-                        .requestMatchers("/", "/home", "/login", "/register", "/maquinaria", "/maquinaria/**", "/buscar", "/avisos/destacados").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        // privadas
-                        .requestMatchers("/perfil/**", "/avisos/**", "/reservas/**").authenticated()
-                        .anyRequest().permitAll()
-                )
-                // --- CSRF: ignorar H2 console ---
-                .csrf(csrf -> csrf.ignoringRequestMatchers(
-                        PathRequest.toH2Console(), openApiDocs, swaggerUi
-                ))
-                // --- Frames: permitir mismo origen para H2 (usa iframes) ---
-                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
-                .formLogin(login -> login
-                        .loginPage("/login")                 // GET /login (tu controller ya lo tiene)
-                        .loginProcessingUrl("/login")        // POST del formulario
-                        .defaultSuccessUrl("/home", false)   // tras login OK -> /home (si no hay SavedRequest)
-                        .failureUrl("/login?error")
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                )
-                .csrf(Customizer.withDefaults());
+          .cors(Customizer.withDefaults())
+          .authorizeHttpRequests(auth -> auth
+              .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+              .requestMatchers("/", "/home", "/login", "/register",
+                               "/maquinaria", "/maquinaria/**", "/buscar", "/avisos/destacados").permitAll()
+              .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+              .requestMatchers("/perfil/**", "/avisos/**", "/reservas/**").authenticated()
+              .anyRequest().authenticated()
+          )
+          .csrf(csrf -> csrf.ignoringRequestMatchers(openApiDocs, swaggerUi))
+          .headers(headers -> {
+              // CSP
+              headers.contentSecurityPolicy(csp -> csp.policyDirectives(
+                  "default-src 'self'; " +
+                  "script-src 'self'; " +
+                  "style-src 'self' 'unsafe-inline'; " +
+                  "img-src 'self' data:; " +
+                  "object-src 'none'; base-uri 'self'; frame-ancestors 'none'"));
+
+              // Clickjacking
+              headers.frameOptions(frame -> frame.deny());
+
+              // Referrer-Policy
+              headers.referrerPolicy(r -> r.policy(ReferrerPolicy.SAME_ORIGIN));
+
+              // Permissions-Policy (Feature-Policy)
+              headers.permissionsPolicy(pp2 -> pp2.policy("geolocation=(), microphone=(), camera=()"));
+
+              // HSTS (solo efectivo sobre HTTPS)
+              headers.httpStrictTransportSecurity(hsts -> hsts
+                  .includeSubDomains(true)
+                  .preload(true)
+                  .maxAgeInSeconds(31536000));
+          })
+          .formLogin(login -> login
+              .loginPage("/login")
+              .loginProcessingUrl("/login")
+              .defaultSuccessUrl("/home", false)
+              .failureUrl("/login?error")
+              .permitAll()
+          )
+          .logout(logout -> logout
+              .logoutUrl("/logout")
+              .logoutSuccessUrl("/login?logout")
+              .deleteCookies("JSESSIONID")
+              .permitAll()
+          );
+
         return http.build();
     }
 
@@ -81,6 +98,4 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }
