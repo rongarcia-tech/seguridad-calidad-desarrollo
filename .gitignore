@@ -1,4 +1,6 @@
 HELP.md
+target/dependency-check-report.html
+
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
