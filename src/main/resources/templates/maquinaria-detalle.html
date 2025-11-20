@@ -28,14 +28,14 @@
             </p>
             <p>Precio base: $<strong th:text="${#numbers.formatDecimal(maq.precioPorDia,0,'COMMA',0,'POINT')}"></strong> / día</p>
 
-            <h3>Condiciones de arriendo</h3>
-            <p th:text="${aviso.condicionesArriendo}">—</p>
-            <p>Medio de pago: <strong th:text="${aviso.medioPago}">—</strong></p>
-            <p>Disponible: <strong th:text="${aviso.disponibleDesde}"></strong> a <strong th:text="${aviso.disponibleHasta}"></strong></p>
+            <!-- <h3>Condiciones de arriendo</h3>
+             <p th:text="${aviso.condicionesArriendo}">—</p>
+             <p>Medio de pago: <strong th:text="${aviso.medioPago}">—</strong></p>
+             <p>Disponible: <strong th:text="${aviso.disponibleDesde}"></strong> a <strong th:text="${aviso.disponibleHasta}"></strong></p>
 
-            <div class="actions">
-                <a class="btn" th:href="@{'/reservas/nueva?avisoId=' + ${aviso.id}}">Reservar</a>
-            </div>
+             <div class="actions">
+                 <a class="btn" th:href="@{'/reservas/nueva?avisoId=' + ${aviso.id}}">Reservar</a>
+             </div>-->
         </section>
 
         <section class="card mantenciones">

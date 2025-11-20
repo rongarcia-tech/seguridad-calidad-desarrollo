@@ -5,10 +5,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -32,9 +34,9 @@ public class WebSecurityConfig {
           .authorizeHttpRequests(auth -> auth
               .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
               .requestMatchers("/", "/home", "/login", "/register",
-                               "/maquinaria", "/maquinaria/**", "/buscar", "/avisos/destacados").permitAll()
+                                "/buscar", "/avisos/destacados").permitAll()
               .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-              .requestMatchers("/perfil/**", "/avisos/**", "/reservas/**").authenticated()
+              .requestMatchers("/perfil/**", "/avisos/**", "/reservas/**","/maquinaria", "/maquinaria/**").authenticated()
               .anyRequest().authenticated()
           )
           .csrf(csrf -> csrf.ignoringRequestMatchers(openApiDocs, swaggerUi))
@@ -48,13 +50,17 @@ public class WebSecurityConfig {
                   "object-src 'none'; base-uri 'self'; frame-ancestors 'none'"));
 
               // Clickjacking
-              headers.frameOptions(frame -> frame.deny());
+              headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny);
 
               // Referrer-Policy
               headers.referrerPolicy(r -> r.policy(ReferrerPolicy.SAME_ORIGIN));
 
               // Permissions-Policy (Feature-Policy)
-              headers.permissionsPolicy(pp2 -> pp2.policy("geolocation=(), microphone=(), camera=()"));
+              headers
+                      .addHeaderWriter(new StaticHeadersWriter(
+                              "Permissions-Policy",
+                              "geolocation=(), microphone=(), camera=()"
+                      ));
 
               // HSTS (solo efectivo sobre HTTPS)
               headers.httpStrictTransportSecurity(hsts -> hsts

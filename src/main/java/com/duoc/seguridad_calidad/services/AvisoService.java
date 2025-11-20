@@ -12,4 +12,5 @@ public interface AvisoService {
                    BigDecimal precioPorDia, boolean destacado,
                    String condiciones, com.duoc.seguridad_calidad.domain.MedioPago medioPago);
     List<Aviso> destacados();
+    Aviso buscarPorId(Long id);
 }

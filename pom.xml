@@ -20,8 +20,8 @@
     <java.version>17</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-  </properties>
 
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -89,22 +89,39 @@
           <release>${java.version}</release>
         </configuration>
       </plugin>
-
       <!-- resources plugin con encoding explícito -->
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.3.1</version>
-        <configuration>
-          <encoding>${project.build.sourceEncoding}</encoding>
-          <useDefaultDelimiters>true</useDefaultDelimiters>
-        </configuration>
-      </plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.3.1</version>
+                <configuration>
+                  <encoding>${project.build.sourceEncoding}</encoding>
+                  <useDefaultDelimiters>true</useDefaultDelimiters>
+                </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+        <plugin>
+            <groupId>org.owasp</groupId>
+            <artifactId>dependency-check-maven</artifactId>
+            <version>9.2.0</version>
+            <configuration>
+                <!-- Usa el server del settings.xml -->
+                <nvdApiServerId>nvd-api</nvdApiServerId>
 
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
+                <!-- Opcional: da más tiempo entre llamadas para evitar throttle -->
+                <nvdApiDelay>8000</nvdApiDelay>
+            </configuration>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
     </plugins>
   </build>
 

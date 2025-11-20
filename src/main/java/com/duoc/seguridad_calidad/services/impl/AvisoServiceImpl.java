@@ -41,4 +41,11 @@ public class AvisoServiceImpl implements AvisoService {
     public List<Aviso> destacados() {
         return repo.findTop10ByDestacadoTrueOrderByIdDesc();
     }
+
+    @Override
+    public Aviso buscarPorId(Long id) {
+        System.out.println("Entro a aviso por ID");
+        System.out.println(repo.findById(id).orElseThrow().getId());
+        return repo.findById(id).orElseThrow();
+    }
 }

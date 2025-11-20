@@ -35,7 +35,7 @@
                     <p>
                         $<span th:text="${#numbers.formatDecimal(aviso.precioPorDia,0,'COMMA',0,'POINT')}"></span> / día
                     </p>
-                    <a th:href="@{'/maquinaria/' + ${aviso.maquinaria.id}}" class="btn">Ver detalle</a>
+                    <a th:href="@{'/avisos/' + ${aviso.id}}" class="btn">Ver detalle</a>
                 </article>
             </div>
             <div th:if="${#lists.isEmpty(destacados)}">No hay avisos destacados por ahora.</div>

@@ -75,4 +75,16 @@ public class AvisoController {
         model.addAttribute("avisos", misAvisos);
         return "avisos-mios";
     }
+
+    @Operation(
+            summary = "Listar mis avisos",
+            description = "Muestra todos los avisos publicados por el usuario autenticado, filtrando por dueño de la maquinaria."
+    )
+    @GetMapping("/{id}")
+    public String veraviso(@PathVariable("id") Long id, Model model) {
+        System.out.println("Entro al controller" + id);
+        var aviso = avisoService.buscarPorId(id);
+        model.addAttribute("aviso", aviso);
+        return "ver-aviso";
+    }
 }

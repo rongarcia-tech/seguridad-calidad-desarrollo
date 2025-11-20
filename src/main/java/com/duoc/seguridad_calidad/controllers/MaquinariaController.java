@@ -44,12 +44,12 @@ public class MaquinariaController {
         if (maq.isEmpty()) return "redirect:/buscar";
 
         // Simplificación: toma el último aviso asociado a la maquinaria
-        Aviso aviso = avisoRepository.findAll().stream()
+       /* Aviso aviso = avisoRepository.findAll().stream()
                 .filter(a -> a.getMaquinaria().getId().equals(id))
-                .reduce((first, second) -> second).orElse(null);
+                .reduce((first, second) -> second).orElse(null);*/
 
         model.addAttribute("maq", maq.get());
-        model.addAttribute("aviso", aviso);
+        //model.addAttribute("aviso", aviso);
         return "maquinaria-detalle";
     }
 
