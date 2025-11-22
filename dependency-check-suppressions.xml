@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+
+  <!--
+    Falso positivo: CVE-2025-7962 corresponde a angus-mail (Jakarta Mail),
+    no a angus-activation. El proyecto no implementa envío de correos,
+    y además se actualizó angus-mail a versión corregida.
+  -->
+  <suppress>
+    <notes>
+      Suppress CVE-2025-7962 for angus-activation:
+      CVE affects angus-mail / Jakarta Mail, not angus-activation.
+      The application does not use email sending features.
+    </notes>
+    <packageUrl regex="true">^pkg:maven/org\.eclipse\.angus/angus-activation@.*$</packageUrl>
+    <cve>CVE-2025-7962</cve>
+  </suppress>
+
+</suppressions>

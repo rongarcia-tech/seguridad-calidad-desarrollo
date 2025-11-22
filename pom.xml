@@ -8,7 +8,8 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.6</version>
+    <!-- Subido para arrastrar Tomcat con CVE corregido -->
+    <version>3.5.7</version>
     <relativePath/>
   </parent>
 
@@ -46,10 +47,18 @@
       <artifactId>thymeleaf-extras-springsecurity6</artifactId>
     </dependency>
 
+    <!-- Springdoc / Swagger actualizado para reducir riesgos DOMPurify -->
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-      <version>2.6.0</version>
+      <version>2.8.12</version>
+    </dependency>
+
+    <!-- Forzamos versión segura de Apache Commons Lang -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.18.0</version>
     </dependency>
 
     <dependency>
@@ -64,9 +73,30 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- JPA con exclusión de angus-activation vulnerable -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.eclipse.angus</groupId>
+          <artifactId>angus-activation</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- Angus Activation explícito en versión más reciente estable 2.0.x -->
+    <dependency>
+      <groupId>org.eclipse.angus</groupId>
+      <artifactId>angus-activation</artifactId>
+      <version>2.0.3</version>
+    </dependency>
+
+    <!-- Angus Mail actualizado para mitigar CVE-2025-7962 -->
+    <dependency>
+      <groupId>org.eclipse.angus</groupId>
+      <artifactId>angus-mail</artifactId>
+      <version>2.0.5</version>
     </dependency>
 
     <dependency>
@@ -112,18 +142,22 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
 
-      <!-- OWASP Dependency-Check actualizado -->
+      <!-- OWASP Dependency-Check -->
       <plugin>
         <groupId>org.owasp</groupId>
         <artifactId>dependency-check-maven</artifactId>
         <version>12.1.0</version>
         <configuration>
           <!-- API Key de NVD (solo para pruebas / sumativa) -->
-          <nvdApiKey></nvdApiKey>
+          <nvdApiKey>0e5c4355-2561-409b-8373-a4b97cd50db6</nvdApiKey>
           <!-- Delay para evitar bloqueo (rate limit) -->
           <nvdApiDelay>8000</nvdApiDelay>
           <!-- No botar el build si falla la actualización -->
           <failOnError>false</failOnError>
+          <!-- Archivo de supresiones para falsos positivos -->
+          <suppressionFiles>
+            <suppressionFile>dependency-check-suppressions.xml</suppressionFile>
+          </suppressionFiles>
         </configuration>
         <executions>
           <execution>
