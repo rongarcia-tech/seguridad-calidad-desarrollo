@@ -1,5 +1,6 @@
 package com.duoc.seguridad_calidad.security;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -28,6 +29,8 @@ public class WebSecurityConfig {
         var pp = PathPatternRequestMatcher.withDefaults();
         var openApiDocs = pp.matcher("/v3/api-docs/**");
         var swaggerUi   = pp.matcher("/swagger-ui/**");
+        // Matcher manual para H2 por si PathRequest falla en tests
+        var h2Console   = pp.matcher("/h2-console/**");
 
         http
           .cors(Customizer.withDefaults())
@@ -37,9 +40,15 @@ public class WebSecurityConfig {
                                 "/buscar", "/avisos/destacados").permitAll()
               .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
               .requestMatchers("/perfil/**", "/avisos/**", "/reservas/**","/maquinaria", "/maquinaria/**").authenticated()
+              .requestMatchers(PathRequest.toH2Console()).permitAll()
+              .requestMatchers("/h2-console/**").permitAll()
               .anyRequest().authenticated()
           )
-          .csrf(csrf -> csrf.ignoringRequestMatchers(openApiDocs, swaggerUi))
+          .csrf(csrf -> csrf.ignoringRequestMatchers(
+                  PathRequest.toH2Console(),
+                  h2Console,
+                  openApiDocs,
+                  swaggerUi))
           .headers(headers -> {
               // CSP
               headers.contentSecurityPolicy(csp -> csp.policyDirectives(
@@ -48,9 +57,10 @@ public class WebSecurityConfig {
                   "style-src 'self' 'unsafe-inline'; " +
                   "img-src 'self' data:; " +
                   "object-src 'none'; base-uri 'self'; frame-ancestors 'none'"));
+              headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin);
 
               // Clickjacking
-              headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny);
+              //headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny);
 
               // Referrer-Policy
               headers.referrerPolicy(r -> r.policy(ReferrerPolicy.SAME_ORIGIN));
@@ -94,8 +104,6 @@ public class WebSecurityConfig {
         cfg.setAllowCredentials(true);
 
         var source = new UrlBasedCorsConfigurationSource(new PathPatternParser());
-        source.registerCorsConfiguration("/v3/api-docs/**", cfg);
-        source.registerCorsConfiguration("/swagger-ui/**", cfg);
         source.registerCorsConfiguration("/**", cfg);
         return source;
     }

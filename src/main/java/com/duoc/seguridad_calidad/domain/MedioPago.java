@@ -1,5 +1,5 @@
 package com.duoc.seguridad_calidad.domain;
 
 public enum MedioPago {
-    EFECTIVO, TRANSFERENCIA, TARJETA
+    EFECTIVO, TRANSFERENCIA, TARJETA,TARJETA_CREDITO
 }
