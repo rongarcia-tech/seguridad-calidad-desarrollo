@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Mis avisos</title>
+    <title>Detalles del Aviso</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/header.css">
@@ -11,63 +11,57 @@
 <!-- Inclusión del fragmento de navegación centralizado -->
 <div th:replace="fragments/header :: siteHeader"></div>
 
-<main class="container">
-    <h1>Detalles del avisos</h1>
+<main class="container" th:if="${aviso}">
+    <h1>Detalles del Aviso</h1>
 
-
-
-        <!-- Título: nombre de la maquinaria -->
-        <h3 class="aviso-titulo"
-            th:text="*{aviso.maquinaria.nombre}">
-            Nombre de la maquinaria
-        </h3>
-
-        <!-- Badge de destacado -->
-        <span class="badge badge-warning"
-              th:if="*{aviso.destacado}">
+    <!-- Badge de destacado -->
+    <span class="badge badge-warning" th:if="${aviso.destacado}">
         Destacado
     </span>
 
-        <!-- Rango de fechas disponible -->
-        <p class="aviso-fechas">
-            Disponible desde
-            <span th:text="${#temporals.format(*{aviso.disponibleDesde}, 'dd-MM-yyyy')}">
+    <!-- Rango de fechas disponible -->
+    <p class="aviso-fechas">
+        Disponible desde
+        <span th:text="${#temporals.format(aviso.disponibleDesde, 'dd-MM-yyyy')}">
             01-01-2025
         </span>
-            hasta
-            <span th:text="${#temporals.format(*{aviso.disponibleHasta}, 'dd-MM-yyyy')}">
+        hasta
+        <span th:text="${#temporals.format(aviso.disponibleHasta, 'dd-MM-yyyy')}">
             31-01-2025
         </span>
-        </p>
+    </p>
 
-        <!-- Precio por día -->
-        <p class="aviso-precio">
-            Precio por día:
-            <strong th:text="${#numbers.formatDecimal(*{aviso.precioPorDia}, 0, 'POINT', 0, 'POINT')}">
-                50000
-            </strong>
-            <span>CLP</span>
-        </p>
+    <!-- Precio por día -->
+    <p class="aviso-precio">
+        Precio por día:
+        <strong th:text="${#numbers.formatDecimal(aviso.precioPorDia, 0, 'POINT', 0, 'POINT')}">
+            50000
+        </strong>
+        <span>CLP</span>
+    </p>
 
-        <!-- Medio de pago -->
-        <p class="aviso-medio-pago">
-            Medio de pago:
-            <span th:text="*{aviso.medioPago}">
+    <!-- Medio de pago -->
+    <p class="aviso-medio-pago">
+        Medio de pago:
+        <span th:text="${aviso.medioPago}">
             TRANSFERENCIA
         </span>
+    </p>
+
+    <!-- Condiciones de arriendo -->
+    <div class="aviso-condiciones">
+        <h5>Condiciones de arriendo</h5>
+        <p th:text="${aviso.condicionesArriendo}">
+            Texto de condiciones de arriendo...
         </p>
-
-        <!-- Condiciones de arriendo -->
-        <div class="aviso-condiciones">
-            <h5>Condiciones de arriendo</h5>
-            <p th:text="*{aviso.condicionesArriendo}">
-                Texto de condiciones de arriendo...
-            </p>
-        </div>
-
-
+    </div>
 
 </main>
+
+<div class="container" th:if="${aviso == null}">
+    <h1>Aviso no encontrado</h1>
+    <p>El aviso que buscas no existe o no está disponible.</p>
+</div>
 
 </body>
 </html>

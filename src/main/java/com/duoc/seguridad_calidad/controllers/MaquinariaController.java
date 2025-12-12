@@ -3,7 +3,6 @@ package com.duoc.seguridad_calidad.controllers;
 import com.duoc.seguridad_calidad.domain.Aviso;
 import com.duoc.seguridad_calidad.domain.Maquinaria;
 import com.duoc.seguridad_calidad.domain.TipoMaquinaria;
-import com.duoc.seguridad_calidad.dtos.MaquinariaForm;
 import com.duoc.seguridad_calidad.repositories.AvisoRepository;
 import com.duoc.seguridad_calidad.repositories.MaquinariaRepository;
 import com.duoc.seguridad_calidad.repositories.UsuarioRepository;

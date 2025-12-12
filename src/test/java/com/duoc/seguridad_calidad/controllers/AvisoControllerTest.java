@@ -16,6 +16,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -98,5 +99,27 @@ class AvisoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("avisos-mios"))
                 .andExpect(model().attribute("avisos", List.of(aviso)));
+    }
+
+    @Test
+    @WithMockUser
+    void verAviso_cuandoExiste_muestraAviso() throws Exception {
+        Aviso aviso = new Aviso();
+        aviso.setId(1L);
+        when(avisoService.buscarPorId(1L)).thenReturn(aviso);
+
+        mockMvc.perform(get("/avisos/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("ver-aviso"))
+                .andExpect(model().attribute("aviso", aviso));
+    }
+
+    @Test
+    @WithMockUser
+    void verAviso_cuandoNoExiste_lanzaExcepcion() throws Exception {
+        when(avisoService.buscarPorId(99L)).thenThrow(new NoSuchElementException("Aviso no encontrado"));
+
+        mockMvc.perform(get("/avisos/99"))
+                .andExpect(status().isNotFound());
     }
 }

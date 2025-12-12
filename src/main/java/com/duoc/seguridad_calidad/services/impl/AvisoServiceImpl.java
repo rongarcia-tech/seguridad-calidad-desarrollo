@@ -44,8 +44,6 @@ public class AvisoServiceImpl implements AvisoService {
 
     @Override
     public Aviso buscarPorId(Long id) {
-        System.out.println("Entro a aviso por ID");
-        System.out.println(repo.findById(id).orElseThrow().getId());
-        return repo.findById(id).orElseThrow();
+        return repo.findById(id).orElseThrow(() -> new java.util.NoSuchElementException("Aviso no encontrado con ID: " + id));
     }
 }

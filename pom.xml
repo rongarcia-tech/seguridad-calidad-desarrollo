@@ -176,7 +176,11 @@
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.8.12</version>
-
+            <configuration>
+                <excludes>
+                    <exclude>**/SeguridadCalidadApplication.class</exclude>
+                </excludes>
+            </configuration>
             <executions>
                 <!-- Adjunta el agente de JaCoCo cuando corren los tests -->
                 <execution>

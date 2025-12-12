@@ -13,9 +13,10 @@ import org.mockito.MockitoAnnotations;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -74,5 +75,29 @@ class AvisoServiceImplTest {
 
         assertEquals(2, destacados.size());
         assertEquals(2L, destacados.get(0).getId());
+    }
+
+    @Test
+    void buscarPorId_cuandoExiste_devuelveAviso() {
+        Long avisoId = 1L;
+        Aviso aviso = new Aviso();
+        aviso.setId(avisoId);
+
+        when(avisoRepository.findById(avisoId)).thenReturn(Optional.of(aviso));
+
+        Aviso resultado = avisoService.buscarPorId(avisoId);
+
+        assertNotNull(resultado);
+        assertEquals(avisoId, resultado.getId());
+    }
+
+    @Test
+    void buscarPorId_cuandoNoExiste_lanzaExcepcion() {
+        Long avisoId = 99L;
+        when(avisoRepository.findById(avisoId)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> {
+            avisoService.buscarPorId(avisoId);
+        });
     }
 }
