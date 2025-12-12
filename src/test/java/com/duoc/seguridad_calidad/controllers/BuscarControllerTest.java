@@ -103,4 +103,76 @@ class BuscarControllerTest {
                 null
         );
     }
+
+    @WithMockUser(username = "user", roles = "USER")
+    @Test
+    void buscarSoloPorComuna() throws Exception {
+        when(maquinariaService.buscar(any(), any(), any(), any(), any(), any())).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/buscar")
+                        .param("comuna", "Santiago"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("resultados"));
+
+        verify(maquinariaService).buscar(null, null, "Santiago", null, null, null);
+    }
+
+    @WithMockUser(username = "user", roles = "USER")
+    @Test
+    void buscarSoloPorPrecioMax() throws Exception {
+        when(maquinariaService.buscar(any(), any(), any(), any(), any(), any())).thenReturn(Collections.emptyList());
+        BigDecimal precio = new BigDecimal("50000");
+
+        mockMvc.perform(get("/buscar")
+                        .param("precioMax", precio.toString()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("resultados"));
+
+        verify(maquinariaService).buscar(null, null, null, null, null, precio);
+    }
+
+    @WithMockUser(username = "user", roles = "USER")
+    @Test
+    void buscarSoloPorFechaDesde() throws Exception {
+        when(maquinariaService.buscar(any(), any(), any(), any(), any(), any())).thenReturn(Collections.emptyList());
+        String fecha = "2024-01-01";
+
+        mockMvc.perform(get("/buscar")
+                        .param("desde", fecha))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("resultados"));
+
+        verify(maquinariaService).buscar(null, null, null, LocalDate.parse(fecha), null, null);
+    }
+
+    @WithMockUser(username = "user", roles = "USER")
+    @Test
+    void buscarSoloPorFechaHasta() throws Exception {
+        when(maquinariaService.buscar(any(), any(), any(), any(), any(), any())).thenReturn(Collections.emptyList());
+        String fecha = "2024-12-31";
+
+        mockMvc.perform(get("/buscar")
+                        .param("hasta", fecha))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("resultados"));
+
+        verify(maquinariaService).buscar(null, null, null, null, LocalDate.parse(fecha), null);
+    }
+
+    @WithMockUser(username = "user", roles = "USER")
+    @Test
+    void buscarConParametrosVaciosNoLlamaServicio() throws Exception {
+        // region="", comuna="", desde="", hasta="" -> El if debe dar false
+        mockMvc.perform(get("/buscar")
+                        .param("region", "  ")
+                        .param("comuna", "")
+                        .param("desde", "")
+                        .param("hasta", ""))
+                .andExpect(status().isOk())
+                .andExpect(view().name("buscar"))
+                .andExpect(model().attributeDoesNotExist("resultados"));
+
+        // Verificar que NO se llamó al servicio
+        verify(maquinariaService, org.mockito.Mockito.never()).buscar(any(), any(), any(), any(), any(), any());
+    }
 }
